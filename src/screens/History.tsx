@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {useAppContext} from '../App.provider';
-import globalStyles from '../styles/globalStyles';
+import globalStyles, {theme} from '../styles/globalStyles';
 import MoodItemRow from '../components/MoodItemRow';
 
 const History: React.FC = props => {
@@ -19,7 +19,7 @@ const History: React.FC = props => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'purple',
+    backgroundColor: theme.colorPurple,
   },
 });
 

@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {View, StyleSheet, Text, Pressable} from 'react-native';
+import {View, StyleSheet, Text, Pressable, Image} from 'react-native';
 import {useAppContext} from '../App.provider';
 import {theme} from '../styles/globalStyles';
 import {MoodOptionType} from '../types';
@@ -12,19 +12,36 @@ const moodOptions: MoodOptionType[] = [
   {emoji: '😤', description: 'frustrated'},
 ];
 
+const imageSrc = require('../assets/butterflies.png');
+
 const MoodPicker: React.FC = () => {
   const [selectedMood, setSelectedMood] = useState<MoodOptionType>();
+  const [hasSelected, setHasSelected] = useState(false);
   const context = useAppContext();
 
   const handleSelect = useCallback(() => {
     if (selectedMood) {
       context.handleSelectMood(selectedMood);
       setSelectedMood(undefined);
+      setHasSelected(true);
     }
   }, [selectedMood]);
 
+  if (hasSelected) {
+    return (
+      <View style={styles.moodListContainer}>
+        <Image source={imageSrc} style={styles.image} resizeMode={'contain'} />
+        <Pressable
+          style={styles.submitMoodButton}
+          onPress={() => setHasSelected(false)}>
+          <Text style={styles.buttonText}>Thanks!</Text>
+        </Pressable>
+      </View>
+    );
+  }
+
   return (
-    <View style={[{borderColor: theme.colorPurple}, styles.moodListContainer]}>
+    <View style={styles.moodListContainer}>
       <Text>How are you feeling today?</Text>
       <View style={styles.moodList}>
         {moodOptions.map(option => (
@@ -74,12 +91,14 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginHorizontal: 16,
     alignItems: 'center',
+    borderColor: theme.colorPurple,
   },
   moodList: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
+    height: 230,
   },
   moodText: {
     fontSize: 24,
@@ -109,9 +128,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 16,
+    backgroundColor: theme.colorPurple,
   },
   submitMoodButtonPressed: {
     opacity: 0.4,
+  },
+  image: {
+    alignSelf: 'center',
+    height: 100,
+    width: 300,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: theme.colorWhite,
   },
 });
 
